@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lenguajes de Programación — Enciclopedia Interactiva</title>
+<style>
+:root{
+  --bg-a:#1a73e8;
+  --bg-b:#0d47a1;
+  --text:#eef2ff;
+  --accent:#ffb86c;
+  --info-accent:#7be0ff;
+  --muted:rgba(255,255,255,0.8);
+  --shadow-glow:rgba(255,255,255,0.08);
+  --card-bg:rgba(255,255,255,0.05);
+  --hover-shadow:rgba(0,0,0,0.35);
+  --modal-shadow:rgba(0,0,0,0.6);
+}
+*{box-sizing:border-box;}
+body,html{margin:0;padding:0;height:100%;font-family:"Montserrat",sans-serif;overflow-x:hidden;background:linear-gradient(135deg,var(--bg-a),var(--bg-b));color:var(--text);}
+header{text-align:center;margin:20px 0;position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:20px;}
+header h1{font-size:3rem;font-weight:900;color:var(--accent);position:relative;display:inline-block;overflow:hidden;}
+header h1::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(120deg,#fff,#7be0ff,#fff);transform:skewX(-20deg);animation:shine 2.5s infinite;}
+@keyframes shine{0%{left:-100%;}50%{left:100%;}100%{left:100%;}}
+header p{color:var(--muted);margin-top:6px;width:100%;text-align:center;}
+
+.header-logo{width:100px;height:100px;cursor:pointer;transition:transform 0.5s;animation:floatTop 3s ease-in-out infinite alternate;}
+.header-logo img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 12px #fff);}
+.header-logo:hover{transform:scale(1.1) rotate(10deg);}
+
+@keyframes floatTop{0%{transform:translateY(0);}50%{transform:translateY(-10px);}100%{transform:translateY(0);}}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:25px;max-width:1200px;margin:20px auto;position:relative;z-index:2;padding:0 15px;}
+.card{background:var(--card-bg);backdrop-filter:blur(6px);border-radius:18px;padding:15px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:transform 0.4s ease,box-shadow 0.4s ease;position:relative;}
+.card:hover{transform:translateY(-10px) scale(1.05) rotateX(5deg) rotateY(5deg);box-shadow:0 20px 40px var(--hover-shadow);}
+.logo{width:110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;background:rgba(255,255,255,0.03);box-shadow:0 8px 22px rgba(0,0,0,0.25), inset 0 -6px 18px rgba(255,255,255,0.02);transition:transform 0.5s ease;}
+.logo img{width:78%;height:78%;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5));}
+
+/* Animaciones diferentes para cada logo de lenguaje */
+.logo.float1{animation:float1 4s ease-in-out infinite alternate;}
+.logo.float2{animation:float2 4.5s ease-in-out infinite alternate;}
+.logo.float3{animation:float3 3.8s ease-in-out infinite alternate;}
+.logo.float4{animation:float4 4.2s ease-in-out infinite alternate;}
+.logo.float5{animation:float5 3.6s ease-in-out infinite alternate;}
+.logo.float6{animation:float6 4.1s ease-in-out infinite alternate;}
+.logo.float7{animation:float7 3.9s ease-in-out infinite alternate;}
+.logo.float8{animation:float8 4.3s ease-in-out infinite alternate;}
+.logo.float9{animation:float9 3.7s ease-in-out infinite alternate;}
+.logo.float10{animation:float10 4s ease-in-out infinite alternate;}
+.logo.float11{animation:float11 3.5s ease-in-out infinite alternate;}
+
+@keyframes float1{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px) rotate(3deg);}}
+@keyframes float2{0%,100%{transform:translateY(0);}50%{transform:translateY(10px) rotate(-5deg);}}
+@keyframes float3{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px) rotate(6deg);}}
+@keyframes float4{0%,100%{transform:translate(0,0);}50%{transform:translate(6px,-6px) rotate(4deg);}}
+@keyframes float5{0%,100%{transform:scale(1) rotate(0);}50%{transform:scale(1.1) rotate(10deg);}}
+@keyframes float6{0%,100%{transform:translateY(0);}50%{transform:translateY(5px) rotate(15deg);}}
+@keyframes float7{0%,100%{transform:translateX(0);}50%{transform:translateX(-10px) rotate(-7deg);}}
+@keyframes float8{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px) rotate(12deg);}}
+@keyframes float9{0%,100%{transform:translate(0,0);}50%{transform:translate(-8px,6px) rotate(-5deg);}}
+@keyframes float10{0%,100%{transform:scale(1);}50%{transform:scale(1.05) rotate(3deg);}}
+@keyframes float11{0%,100%{transform:translateY(0);}50%{transform:translateY(10px) rotate(-10deg);}}
+
+.lang-name{font-weight:700;text-align:center;}
+#particles{position:fixed;inset:0;z-index:0;}
+
+/* Modal */
+.overlay{display:none;position:fixed;inset:0;background:rgba(6,6,12,0.85);backdrop-filter:blur(6px);z-index:999;align-items:center;justify-content:center;transition:opacity .3s ease;}
+.overlay.show{display:flex;}
+.modal{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:20px;padding:22px 28px;box-shadow:0 28px 80px var(--modal-shadow);max-width:900px;width:90%;max-height:90vh;overflow:auto;transform:scale(.9);opacity:0;transition:all .5s ease;}
+.modal.show{transform:scale(1);opacity:1;}
+.modal-head{display:flex;align-items:center;gap:16px;margin-bottom:10px;}
+.modal-head .logo-mini{width:60px;height:60px;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.02);box-shadow:0 4px 14px rgba(0,0,0,0.25);}
+.modal-head h2{margin:0;font-size:1.6rem;color:var(--accent);font-weight:900;}
+.modal-section{margin-top:14px;}
+.modal-section h3{margin:8px 0 6px;color:var(--info-accent);font-size:1.05rem;}
+.modal-section p{margin:0;color:var(--muted);line-height:1.5;}
+.modal-list{margin-left:18px;color:var(--muted);}
+.close-hint{margin-top:12px;font-size:0.85rem;color:rgba(255,255,255,0.55);text-align:right;font-style:italic;}
+.big-logo{position:fixed;inset:0;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity .4s ease;}
+.big-logo.show{opacity:1;pointer-events:auto;}
+.big-logo img{max-width:80%;max-height:80%;filter:drop-shadow(0 0 20px #7be0ff);animation:logoGlow 1s ease forwards;}
+@keyframes logoGlow{0%{transform:scale(0.2);opacity:0;}50%{transform:scale(1.2);opacity:1;}100%{transform:scale(1);opacity:1;}}
+.quiz-feedback{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-size:3rem;font-weight:900;color:#fff;z-index:1500;opacity:0;pointer-events:none;transition:opacity .3s;}
+.quiz-feedback.show{opacity:1;pointer-events:auto;}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<header>
+  <div class="header-logo" id="logoCobaej"><img src="cobaej.png" alt="Cobaej Logo"></div>
+  <h1>Lenguajes de Programación</h1>
+  <div class="header-logo" id="logoEmblema"><img src="emblema.png" alt="Emblema Logo"></div>
+</header>
+<p style="text-align:center;margin-top:-10px;color:var(--muted);">Enciclopedia interactiva — haz clic en un logotipo para ver información y prueba tu conocimiento.</p>
+
+<main class="grid" id="grid"></main>
+
+<div class="big-logo" id="bigLogo"><img src="" alt=""></div>
+
+<div id="overlay" class="overlay" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div class="logo-mini" id="modal-logo"></div>
+      <h2 id="modal-title">Lenguaje</h2>
+    </div>
+    <div class="modal-section">
+      <h3>Definición</h3>
+      <p id="modal-desc"></p>
+    </div>
+    <div class="modal-section">
+      <h3>Características Principales</h3>
+      <ul class="modal-list" id="modal-carac"></ul>
+    </div>
+    <div class="modal-section">
+      <h3>Usos Comunes</h3>
+      <ul class="modal-list" id="modal-usos"></ul>
+    </div>
+    <div class="modal-section">
+      <h3>Pregunta Interactiva</h3>
+      <p id="modal-question"></p>
+      <div id="quiz-options"></div>
+    </div>
+    <div class="close-hint">Haz clic fuera para cerrar</div>
+  </div>
+</div>
+
+<div class="quiz-feedback" id="quizFeedback">Incorrecto!</div>
+
+<script>
+const DATA = {
+  "Python": {title:"Python",desc:"Python es un lenguaje de programación interpretado, de alto nivel y de propósito general, conocido por su sintaxis clara y legible que facilita el aprendizaje y la escritura rápida de código.",carac:["Fácil de aprender y leer","Amplias librerías para diversas áreas","Tipado dinámico y manejo automático de memoria","Multiparadigma: soporta OOP, funcional y procedural"],usos:["Ciencia de Datos y Machine Learning","Desarrollo Web y APIs","Automatización de tareas y scripts","Desarrollo de videojuegos y prototipos rápidos"],logo:"https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg",question:{q:"¿Python es tipado estático o dinámico?",options:["Estático","Dinámico"],answer:1}},
+  "JavaScript": {title:"JavaScript",desc:"JavaScript es un lenguaje de scripting multiparadigma, que permite manipular el comportamiento de páginas web y aplicaciones web interactivas, tanto en cliente como en servidor.",carac:["Lenguaje asíncrono","Basado en prototipos","Ejecución en cliente y servidor","Amplio ecosistema de frameworks y librerías"],usos:["Desarrollo Front-end con frameworks modernos","Back-end con Node.js","Aplicaciones híbridas y móviles","Automatización de tareas web"],logo:"https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",question:{q:"¿JavaScript se puede ejecutar fuera del navegador?",options:["Sí","No"],answer:0}},
+  "HTML": {title:"HTML",desc:"HTML (HyperText Markup Language) es el lenguaje de marcado principal de la web, utilizado para estructurar contenido, crear enlaces y organizar información en páginas web.",carac:["Basado en etiquetas","Estructura semántica clara","Requisito fundamental para la web","Fácil de combinar con CSS y JS"],usos:["Estructura de páginas web","Integración de multimedia","Formularios y validaciones","SEO y accesibilidad"],logo:"https://upload.wikimedia.org/wikipedia/commons/3/38/HTML5_Badge.svg",question:{q:"¿HTML es un lenguaje de programación?",options:["Sí","No"],answer:1}},
+  "CSS": {title:"CSS",desc:"CSS (Cascading Style Sheets) es un lenguaje de estilos que permite separar el contenido HTML de su presentación visual, controlando colores, fuentes, disposición y animaciones.",carac:["Separación de contenido y estilo","Diseño responsivo y adaptable","Herencia y cascada de estilos","Compatible con todos los navegadores modernos"],usos:["Estilización de páginas web","Maquetación avanzada","Animaciones y transiciones","Temas y personalización de UI"],logo:"https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg",question:{q:"¿CSS controla la apariencia de una página web?",options:["Sí","No"],answer:0}},
+  "Java": {title:"Java",desc:"Java es un lenguaje de programación robusto, orientado a objetos, con independencia de plataforma gracias a la máquina virtual (JVM), ampliamente usado en aplicaciones empresariales y móviles.",carac:["Orientado a objetos","Independiente de plataforma","Tipado estático fuerte","Gran ecosistema y comunidad"],usos:["Aplicaciones empresariales y sistemas backend","Desarrollo de apps Android","Big Data y análisis","Aplicaciones de escritorio"],logo:"https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg",question:{q:"¿Java es tipado estático o dinámico?",options:["Estático","Dinámico"],answer:0}},
+  "C": {title:"C",desc:"C es un lenguaje de programación de propósito general, eficiente y de bajo nivel que permite control detallado de la memoria y hardware, ampliamente usado en sistemas y software crítico.",carac:["Alto rendimiento y eficiencia","Portabilidad a distintas plataformas","Control manual de memoria","Base para otros lenguajes modernos"],usos:["Sistemas operativos","Software embebido y controladores","Aplicaciones de alto rendimiento","Aprendizaje de programación estructurada"],logo:"https://upload.wikimedia.org/wikipedia/commons/1/19/C_Logo.png",question:{q:"¿C permite manejo directo de memoria?",options:["Sí","No"],answer:0}},
+  "C++": {title:"C++",desc:"C++ es un lenguaje de programación de propósito general, basado en C, con soporte de programación orientada a objetos y alto rendimiento, usado en aplicaciones de software avanzadas y videojuegos.",carac:["Programación orientada a objetos","Alto rendimiento","STL (Standard Template Library)","Compatibilidad con C"],usos:["Videojuegos y motores gráficos","Sistemas embebidos y software avanzado","Simulación y modelado","Aplicaciones de alto rendimiento"],logo:"https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg",question:{q:"¿C++ es orientado a objetos?",options:["Sí","No"],answer:0}},
+  "C#": {title:"C#",desc:"C# es un lenguaje moderno desarrollado por Microsoft, orientado a objetos, fuertemente tipado y con integración profunda con el framework .NET, ideal para aplicaciones de Windows y juegos.",carac:["Orientado a objetos","Integración con .NET","Tipado estático","Sintaxis clara y moderna"],usos:["Desarrollo de apps Windows","Juegos con Unity","Software empresarial y corporativo","Aplicaciones web con ASP.NET"],logo:"https://upload.wikimedia.org/wikipedia/commons/4/4f/Csharp_Logo.png",question:{q:"¿C# se integra con .NET?",options:["Sí","No"],answer:0}},
+  "PHP": {title:"PHP",desc:"PHP es un lenguaje de scripting interpretado del lado del servidor, ampliamente usado para crear sitios web dinámicos y aplicaciones web robustas.",carac:["Interpretado en servidor","Amplio soporte y comunidad","Integración con bases de datos","Flexible y fácil de aprender"],usos:["Web dinámica y CMS","Desarrollo de aplicaciones web","Sistemas de comercio electrónico","Automatización de tareas web"],logo:"https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg",question:{q:"¿PHP se ejecuta en el servidor?",options:["Sí","No"],answer:0}},
+  "Swift": {title:"Swift",desc:"Swift es un lenguaje moderno de Apple, seguro y rápido, diseñado para desarrollar aplicaciones para iOS, macOS, watchOS y tvOS con sintaxis clara y eficiente.",carac:["Seguro y rápido","Sintaxis clara y concisa","Optimizado para Apple","Multiparadigma (OOP y funcional)"],usos:["Desarrollo de apps iOS y macOS","Juegos para plataformas Apple","Automatización y scripts","Apps de productividad y utilidades"],logo:"https://upload.wikimedia.org/wikipedia/commons/9/9d/Swift_logo.svg",question:{q:"¿Swift se usa para iOS?",options:["Sí","No"],answer:0}},
+  "Ruby": {title:"Ruby",desc:"Ruby es un lenguaje dinámico y legible, enfocado en la simplicidad y productividad, muy conocido por el framework Rails que facilita el desarrollo rápido de aplicaciones web.",carac:["Sintaxis simple y elegante","Orientado a objetos","Gran comunidad y soporte","Facilidad para desarrollo web con Rails"],usos:["Desarrollo web con Ruby on Rails","Automatización de tareas","Prototipos y startups","Desarrollo de APIs y servicios web"],logo:"https://upload.wikimedia.org/wikipedia/commons/7/73/Ruby_logo.svg",question:{q:"¿Ruby es famoso por Rails?",options:["Sí","No"],answer:0}}
+};
+
+// Generar tarjetas
+const grid=document.getElementById('grid');
+let floatCount = 1;
+for(const key in DATA){
+  const card=document.createElement('div');
+  card.className='card';
+  card.dataset.key=key;
+  const floatClass = 'float'+floatCount;
+  card.innerHTML=`<div class="logo ${floatClass}"><img src="${DATA[key].logo}" alt="${key} logo"></div><div class="lang-name">${key}</div>`;
+  grid.appendChild(card);
+  floatCount++; if(floatCount>11) floatCount=1;
+}
+
+// Partículas
+const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d');
+let particlesArray=[];
+function initParticles(){
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;particlesArray=[];
+  for(let i=0;i<180;i++){
+    particlesArray.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,radius:Math.random()*3+1,speedX:(Math.random()-0.5)*0.7,speedY:(Math.random()-0.5)*0.7,color:`rgba(123,224,255,0.7)`});
+  }
+}
+function animateParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particlesArray.forEach(p=>{
+    ctx.beginPath();ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
+    ctx.fillStyle=p.color;ctx.fill();
+    p.x+=p.speedX;p.y+=p.speedY;
+    if(p.x>canvas.width)p.x=0;if(p.x<0)p.x=canvas.width;
+    if(p.y>canvas.height)p.y=0;if(p.y<0)p.y=canvas.height;
+  });
+  requestAnimationFrame(animateParticles);
+}
+initParticles();animateParticles();
+window.addEventListener('resize',initParticles);
+
+// Modal
+const overlay=document.getElementById('overlay'),modal=overlay.querySelector('.modal');
+const modalTitle=document.getElementById('modal-title'),modalDesc=document.getElementById('modal-desc');
+const modalCarac=document.getElementById('modal-carac'),modalUsos=document.getElementById('modal-usos');
+const modalLogoBox=document.getElementById('modal-logo'),modalQuestion=document.getElementById('modal-question'),quizOptions=document.getElementById('quiz-options');
+const bigLogo=document.getElementById('bigLogo'),quizFeedback=document.getElementById('quizFeedback');
+
+document.querySelectorAll('.card').forEach(card=>{
+  card.addEventListener('click',()=>openModal(card.dataset.key));
+});
+
+function openModal(key){
+  const data=DATA[key];
+  if(!data)return;
+  bigLogo.querySelector('img').src=data.logo;
+  bigLogo.classList.add('show');
+  setTimeout(()=>{
+    bigLogo.classList.remove('show');
+    modalTitle.textContent=data.title;
+    modalDesc.textContent=data.desc;
+    modalCarac.innerHTML='';data.carac.forEach(c=>{const li=document.createElement('li');li.textContent=c;modalCarac.appendChild(li);});
+    modalUsos.innerHTML='';data.usos.forEach(u=>{const li=document.createElement('li');li.textContent=u;modalUsos.appendChild(li);});
+    modalLogoBox.innerHTML='';const img=document.createElement('img');img.src=data.logo;img.style.width='100%';img.style.height='100%';img.style.objectFit='contain';modalLogoBox.appendChild(img);
+    modalQuestion.textContent=data.question.q;
+    quizOptions.innerHTML='';
+    data.question.options.forEach((opt,i)=>{
+      const btn=document.createElement('button');
+      btn.textContent=opt;
+      btn.style.margin='6px';btn.style.padding='8px 14px';btn.style.borderRadius='8px';btn.style.border='none';
+      btn.style.cursor='pointer';btn.style.fontWeight='600';
+      btn.addEventListener('click',()=>checkAnswer(i,data.question.answer));
+      quizOptions.appendChild(btn);
+    });
+    overlay.classList.add('show');modal.classList.add('show');
+  },800);
+}
+
+function checkAnswer(selected,correct){
+  modal.classList.remove('show');overlay.classList.remove('show');
+  quizFeedback.textContent=selected===correct?'¡Correcto!':'Incorrecto!';
+  quizFeedback.style.backgroundColor=selected===correct?'rgba(0,255,100,0.7)':'rgba(255,0,0,0.7)';
+  quizFeedback.classList.add('show');
+  setTimeout(()=>{quizFeedback.classList.remove('show');},2000);
+}
+
+overlay.addEventListener('click',(e)=>{if(e.target===overlay){overlay.classList.remove('show');modal.classList.remove('show');}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){overlay.classList.remove('show');modal.classList.remove('show');}});
+</script>
+
+</body>
+</html>
